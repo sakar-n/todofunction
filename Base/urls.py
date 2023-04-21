@@ -12,4 +12,5 @@ urlpatterns = [
     path("taskcreate/", login_required(views.taskcreate), name="taskcreate"),
     path("taskupdate/<int:pk>/", login_required(views.taskupdate), name="taskupdate"),
     path("taskdelete/<int:pk>/", login_required(views.taskdelete), name="taskdelete"),
+    path("taskview/", login_required(views.taskview), name="taskview"),
 ]

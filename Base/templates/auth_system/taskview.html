@@ -1,0 +1,7 @@
+<h>Listview</h>
+<ul>
+    {% for i in view_list %}
+    <h4>{{ i.task_list }}</h4>
+    <li> {{ i.task_description }} </li>
+    {% endfor %}
+</ul>

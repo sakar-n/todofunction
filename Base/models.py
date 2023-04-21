@@ -17,3 +17,7 @@ class User(models.Model):
 
     class Meta:
         ordering = ["complete"]
+
+class Taskmodel(models.Model):
+    task_list = models.CharField(max_length=200)
+    task_description = models.CharField(max_length=200)

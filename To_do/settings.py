@@ -55,7 +55,7 @@ ROOT_URLCONF = "To_do.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": ["templates"],
+        "DIRS": ["templates/auth_system"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

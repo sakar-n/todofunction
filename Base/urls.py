@@ -9,8 +9,7 @@ urlpatterns = [
     path("inside/", views.inside, name="inside"),
     path("logout/", views.logoutUser, name="logout"),
     path("tasklist/", login_required(views.tasklist), name="tasklist"),
-    path("taskcreate/", login_required(views.taskcreate), name="taskcreate"),
-    path("taskupdate/<int:pk>/", login_required(views.taskupdate), name="taskupdate"),
-    path("taskdelete/<int:pk>/", login_required(views.taskdelete), name="taskdelete"),
+    path("taskupdate/", login_required(views.taskupdate), name="taskupdate"),
+    path("taskdelete/<int:id>/", login_required(views.taskdelete), name="taskdelete"),
     path("taskview/", login_required(views.taskview), name="taskview"),
 ]

@@ -1,7 +1,16 @@
-<h>Listview</h>
+<h>Task list</h>
+
 <ul>
-    {% for i in view_list %}
-    <h4>{{ i.task_list }}</h4>
-    <li> {{ i.task_description }} </li>
-    {% endfor %}
-</ul>
+    <form method="POST">
+        {% for id in view_list %}
+        {% csrf_token %}
+        <h4>{{ id.task_list }}</h4>
+        <li> {{ id.task_description }} <a href="{% url 'taskdelete' id.id  %}">delete</a>
+            <form method="GET" action="{% url 'taskview' %}">
+                <input type="checkbox" name="completed" value="complete">
+                <label for="completed">completed</label>
+                <button type="submit">Update</button>
+            </form>
+            {% endfor %}
+    </form>
+</ul><br>

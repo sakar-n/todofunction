@@ -13,7 +13,7 @@
 </h1>
 <h>Listview</h>
 <ul>
-    {% for i in view_list %}
+    {% for i in Task_list %}
     <h4>{{ i.task_list }}</h4>
     <li> {{ i.task_description }} </li>
     {% endfor %}
@@ -46,4 +46,4 @@
 <a href="{% url 'logout' %}"> Logout</a><br>
 
 <a href="{% url 'login' %}">Go Back </a><br>
-<a href="{% url 'taskview' %}">taskview</a><br>
+<a href="{% url 'todotask' %}">MyTask</a><br>

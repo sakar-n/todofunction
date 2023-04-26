@@ -1,0 +1,19 @@
+<h>specific Task list</h>
+<ul>
+    <form method="POST">
+
+        {% csrf_token %}
+        <h4>{{ task_list }}</h4>
+        <li> {{ task_description }}
+            <form method="POST">
+                <a href="{% url 'taskedit' task_id=task_id %}">Edit Task</a>
+                <a href="/todotask">Cancel </a>
+
+
+
+            </form>
+
+
+
+    </form>
+</ul><br>

@@ -10,11 +10,11 @@ from .forms import Taskform, Signupform
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
+
 # Create your views here.
 
 
 def homePage(request):
-    
     return render(request, "auth_system/home.html")
 
 
@@ -25,8 +25,8 @@ def registration(request):
         if form.is_valid():
             form.save()
             messages.success(request, ("User Has been Registered"))
-            return redirect('login')
-    else:   
+            return redirect("login")
+    else:
         return render(request, "auth_system/registration.html", {"form": form})
 
 
@@ -55,12 +55,11 @@ def logoutUser(request):
 
 @login_required
 def tasklist(request):
-    
     if request.method == "POST":
         form = Taskform(request.POST)
-        
+
         if form.is_valid():
-            task =form.save(commit=False)
+            task = form.save(commit=False)
             task.user = request.user
             task.save()
 
@@ -72,32 +71,53 @@ def tasklist(request):
 
 
 @login_required
-def taskview(request):
-    view_list = Taskmodel.objects.filter(user=request.user.id)
-    
-    return render(request, "auth_system/taskview.html", {'view_list': view_list})
+def todotask(request):
+    Task_list = Taskmodel.objects.filter(user=request.user.id)
+
+    return render(request, "auth_system/todotask.html", {"Task_list": Task_list})
 
 
 @login_required
-def taskdelete(request,id):
-    context ={}
-    obj = get_object_or_404(Taskmodel, id = id)
+def taskdelete(request, id):
+    context = {}
+    obj = get_object_or_404(Taskmodel, id=id)
     if request.method == "POST":
         obj.delete()
-        return HttpResponseRedirect("/taskview")
-    
-    return render(request, "auth_system/taskdelete.html", context)
+        messages.success(request, ("Item Has been deleted"))
+        return HttpResponseRedirect("/todotask")
 
-
-    
-
+    else:
+        return render(request, "auth_system/taskdelete.html", context)
 
 
 @login_required
-def taskupdate(request,id):
-    context ={}
-    obj = get_object_or_404(Taskmodel, id = id)
+def taskedit(request, task_id):
+    obj = get_object_or_404(Taskmodel, id=task_id)
     if request.method == "POST":
-        obj.complete
-   
-   
+        fm = Taskform(request.POST, instance=obj)
+        if fm.is_valid():
+            fm.save()
+            return redirect("taskdetail", id=task_id)
+    else:
+        fm = Taskform(instance=obj)
+
+        return render(request, "auth_system/taskedit.html", {"form": fm})
+
+
+@login_required
+def taskview(request):
+    Task_list = Taskmodel.objects.filter(user=request.user.id)
+
+    return render(request, "auth_system/taskview.html", {"Task_list": Task_list})
+
+
+@login_required
+def taskdetail(request, id):
+    obj = get_object_or_404(Taskmodel, id=id)
+    context = {
+        "task_list": obj.task_list,
+        "task_description": obj.task_description,
+        "task_id": obj.id,
+    }
+
+    return render(request, "auth_system/taskdetail.html", context)

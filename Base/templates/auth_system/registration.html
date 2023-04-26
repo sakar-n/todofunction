@@ -1,3 +1,45 @@
+{% extends 'auth_system/base.html' %}
+{% block content %}
+
+
+
+<style>
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    /* Style for submit button */
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    /* Style for form container */
+    form {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+</style>
 <h1>User Registration Form</h1>
 
 
@@ -8,8 +50,10 @@
     {{ form.username.label }}
     {{ form.username}}<br>
 
+
+
     {{ form.email.label }}
-    {{ form.email}}<br>
+    {{ form.email}}
 
     {{ form.first_name.label}}
     {{ form.first_name}}<br>
@@ -25,3 +69,4 @@
 
     <input type="submit" value="Submit">
 </form>
+{% endblock content %}

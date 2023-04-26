@@ -2,15 +2,21 @@
 
 <ul>
     <form method="POST">
-        {% for id in view_list %}
+        {% for id in Task_list %}
         {% csrf_token %}
         <h4>{{ id.task_list }}</h4>
         <li> {{ id.task_description }} <a href="{% url 'taskdelete' id.id  %}">delete</a>
-            <form method="GET" action="{% url 'taskview' %}">
+            <form method="POST">
                 <input type="checkbox" name="completed" value="complete">
                 <label for="completed">completed</label>
-                <button type="submit">Update</button>
+
+                <a href="{% url 'taskedit' id.id  %}">
+                    <button type="button">Update</button></a>
             </form>
+
+
             {% endfor %}
     </form>
 </ul><br>
+
+<h>specific Task list</h>

@@ -1,0 +1,12 @@
+<h>To-do list</h>
+
+<ul>
+    <form method="POST">
+        {% for id in Task_list %}
+        {% csrf_token %}
+
+
+        <h4><a href="{% url 'taskdetail' id.id %}">{{ id.task_list }}</a> <a
+                href="{% url 'taskdelete' id.id  %}">delete</a></h4>
+
+        {% endfor %}

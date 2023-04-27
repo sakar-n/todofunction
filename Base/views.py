@@ -38,7 +38,7 @@ def loginpage(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect("tasklist")
+            return redirect("taskname")
         else:
             messages.info(request, "Email or password is incorrect")
     return render(request, "auth_system/login.html", {"form": form})
@@ -54,7 +54,7 @@ def logoutUser(request):
 
 
 @login_required
-def tasklist(request):
+def taskname(request):
     if request.method == "POST":
         form = Taskform(request.POST)
 
@@ -64,7 +64,7 @@ def tasklist(request):
             task.save()
 
             messages.success(request, ("Item Has been added"))
-            return redirect("tasklist")
+            return redirect("taskname")
     else:
         form = Taskform
         return render(request, "auth_system/tasklist.html", {"form": form})
@@ -72,9 +72,9 @@ def tasklist(request):
 
 @login_required
 def todotask(request):
-    Task_list = Taskmodel.objects.filter(user=request.user.id)
+    Task_name = Taskmodel.objects.filter(user=request.user.id)
 
-    return render(request, "auth_system/todotask.html", {"Task_list": Task_list})
+    return render(request, "auth_system/todotask.html", {"Task_name": Task_name})
 
 
 @login_required
@@ -106,18 +106,22 @@ def taskedit(request, task_id):
 
 @login_required
 def taskview(request):
-    Task_list = Taskmodel.objects.filter(user=request.user.id)
+    Task_name = Taskmodel.objects.filter(user=request.user.id)
 
-    return render(request, "auth_system/taskview.html", {"Task_list": Task_list})
+    return render(request, "auth_system/taskview.html", {"Task_name": Task_name})
 
 
 @login_required
 def taskdetail(request, id):
     obj = get_object_or_404(Taskmodel, id=id)
     context = {
-        "task_list": obj.task_list,
+        "task_name": obj.task_name,
         "task_description": obj.task_description,
         "task_id": obj.id,
     }
 
     return render(request, "auth_system/taskdetail.html", context)
+
+
+def home_view(request):
+    return render(request, "login.html")

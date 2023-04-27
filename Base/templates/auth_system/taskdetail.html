@@ -1,19 +1,38 @@
-<h>specific Task list</h>
-<ul>
-    <form method="POST">
+{% extends 'auth_system/base.html' %}
+{% block content %}<style>
+    .center {
+        margin: auto;
+        width: 60%;
+        border: 3px solid white;
+        padding: 10px;
+    }
 
-        {% csrf_token %}
-        <h4>{{ task_list }}</h4>
-        <li> {{ task_description }}
+    .center {
+        text-align: center;
+        border: 3px solid white;
+    }
+
+
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+</style>
+<div class="center">
+    <div class="center">
+        <h2>Task Details</h2>
+        <ul>
             <form method="POST">
-                <a href="{% url 'taskedit' task_id=task_id %}">Edit Task</a>
-                <a href="/todotask">Cancel </a>
 
-
-
-            </form>
-
-
-
-    </form>
-</ul><br>
+                {% csrf_token %}
+                <h4>Task name : {{ task_name }}
+                    <li>Task description: {{ task_description }}
+                </h4>
+                <form method="POST">
+                    <button><a href="{% url 'taskedit' task_id=task_id %}">Edit Task</a></button>
+                    <button> <a href="/todotask">Go Back</a></button>
+                </form>
+        </ul><br>
+        {% endblock content %}

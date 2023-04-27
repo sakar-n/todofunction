@@ -1,17 +1,70 @@
-{% if request.user.is_authenticated %}
+{% extends 'auth_system/base.html' %}
+{% block content %}<style>
+    .center {
+        margin: auto;
+        width: 60%;
+        border: 3px solid white;
+        padding: 10px;
+    }
+
+    .center {
+        text-align: center;
+        border: 3px solid white;
+    }
 
 
-<h1>Hello, {{request.user.first_name}}</h1>
 
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    /* Style for submit button */
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    /* Style for form container */
+    form {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+</style>
+<div class="center">
+    <div class="center">
+        {% if request.user.is_authenticated %}
+
+
+        <h1>Hello, {{request.user.first_name}}</h1>
+    </div>
+</div>
 
 {% else %}
 <a href="{% url 'login' %}">login</a>
 {% endif %}
 <hr>
-<h1> My to do list
 
-</h1>
-<h>Listview</h>
+
 <ul>
     {% for i in Task_list %}
     <h4>{{ i.task_list }}</h4>
@@ -27,10 +80,7 @@
 <form method="POST">
     {% csrf_token %}
     {{ form }}
-    <!-- <label for="task_list">Add Task: </label>
-        <input id="task_list" type="text" name="task_list" value="{{ current_name }}">
-        <label for="task_list">Task Description: </label>
-        <input id="task_list" type="text" name="task_list" value="{{ model_data }}">-->
+
     <button type="submit">Add</button>
 </form>
 
@@ -42,8 +92,24 @@
 </ul>
 {% endif %}
 <br>
+<form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">logout</button>
+</form>
+<form action="{% url 'homepage' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Go Back</button>
+</form>
+<form action="{% url 'todotask' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">MyTask</button>
+</form>
 
-<a href="{% url 'logout' %}"> Logout</a><br>
 
-<a href="{% url 'login' %}">Go Back </a><br>
-<a href="{% url 'todotask' %}">MyTask</a><br>
+
+
+
+
+
+
+{% endblock content %}

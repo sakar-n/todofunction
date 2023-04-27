@@ -11,6 +11,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 
+
 # Create your views here.
 
 
@@ -25,9 +26,12 @@ def registration(request):
         if form.is_valid():
             form.save()
             messages.success(request, ("User Has been Registered"))
+
             return redirect("login")
-    else:
-        return render(request, "auth_system/registration.html", {"form": form})
+        else:
+            messages.error(request, "User already exist")
+            return redirect("Registration")
+    return render(request, "auth_system/registration.html", {"form": form})
 
 
 def loginpage(request):
@@ -65,6 +69,9 @@ def taskname(request):
 
             messages.success(request, ("Item Has been added"))
             return redirect("taskname")
+        else:
+            messages.error(request, "Task already exist")
+            return redirect("taskname")
     else:
         form = Taskform
         return render(request, "auth_system/tasklist.html", {"form": form})
@@ -79,7 +86,6 @@ def todotask(request):
 
 @login_required
 def taskdelete(request, id):
-    context = {}
     obj = get_object_or_404(Taskmodel, id=id)
     if request.method == "POST":
         obj.delete()
@@ -87,7 +93,7 @@ def taskdelete(request, id):
         return HttpResponseRedirect("/todotask")
 
     else:
-        return render(request, "auth_system/taskdelete.html", context)
+        return render(request, "auth_system/taskdelete.html")
 
 
 @login_required

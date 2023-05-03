@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from .models import Taskmodel
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from .forms import Taskform, Signupform
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -65,16 +65,25 @@ def taskname(request):
         if form.is_valid():
             task = form.save(commit=False)
             task.user = request.user
-            task.save()
+            existing_task_name = Taskmodel.objects.filter(
+                user=request.user, task_name=task.task_name
+            )
+            if existing_task_name.exists():
+                messages.error(request, "Task already exists")
+            else:
+                task.save()
 
-            messages.success(request, ("Item Has been added"))
+                messages.success(request, ("Item Has been added"))
             return redirect("taskname")
         else:
             messages.error(request, "Task already exist")
             return redirect("taskname")
     else:
         form = Taskform
-        return render(request, "auth_system/tasklist.html", {"form": form})
+        Task_name = Taskmodel.objects.filter(user=request.user.id)
+        return render(
+            request, "auth_system/taskname.html", {"form": form, "Task_name": Task_name}
+        )
 
 
 @login_required
@@ -85,18 +94,23 @@ def todotask(request):
 
 
 @login_required
-def taskdelete(request, id):
+# @permission_required("views.taskdelete", raise_exception=True)
+def taskdelete(request, id, user):
     obj = get_object_or_404(Taskmodel, id=id)
-    if request.method == "POST":
-        obj.delete()
-        messages.success(request, ("Item Has been deleted"))
-        return HttpResponseRedirect("/todotask")
-
+    user = request.user.id
+    if request.user == obj.user:
+        if request.method == "POST":
+            obj.delete()
+            messages.success(request, ("Item Has been deleted"))
+            return HttpResponseRedirect("/todotask")
+        return render(request, "auth_system/taskdelete.html", {"task": obj})
     else:
-        return render(request, "auth_system/taskdelete.html")
+        messages.error(request, "You are not authorized to delete this task.")
+        return redirect("todotask")
 
 
 @login_required
+# @permission_required("views.delete_task", raise_exception=True)
 def taskedit(request, task_id):
     obj = get_object_or_404(Taskmodel, id=task_id)
     if request.method == "POST":

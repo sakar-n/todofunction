@@ -94,6 +94,13 @@ def todotask(request):
 
 
 @login_required
+def taskview(request):
+    Task_name = Taskmodel.objects.filter(user=request.user.id)
+
+    return render(request, "auth_system/taskview.html", {"Task_name": Task_name})
+
+
+@login_required
 # @permission_required("views.taskdelete", raise_exception=True)
 def taskdelete(request, id, user):
     obj = get_object_or_404(Taskmodel, id=id)
@@ -110,37 +117,41 @@ def taskdelete(request, id, user):
 
 
 @login_required
+def taskdetail(request, id):
+    obj = get_object_or_404(Taskmodel, id=id)
+    user_id = obj.user_id
+
+    if request.user.id == obj.user_id:
+        context = {
+            "task_name": obj.task_name,
+            "task_description": obj.task_description,
+            "task_id": obj.id,
+        }
+
+        return render(request, "auth_system/taskdetail.html", context)
+    else:
+        messages.error(request, "You are not authorized to view this task.")
+        return redirect("taskname")
+
+
+@login_required
 # @permission_required("views.delete_task", raise_exception=True)
 def taskedit(request, task_id):
     obj = get_object_or_404(Taskmodel, id=task_id)
-    if request.method == "POST":
-        fm = Taskform(request.POST, instance=obj)
-        if fm.is_valid():
-            fm.save()
-            return redirect("taskdetail", id=task_id)
+    user_id = obj.user_id
+    if request.user.id == obj.user_id:
+        if request.method == "POST":
+            fm = Taskform(request.POST, instance=obj)
+            if fm.is_valid():
+                fm.save()
+                return redirect("taskdetail", id=task_id)
+        else:
+            fm = Taskform(instance=obj)
+
+            return render(request, "auth_system/taskedit.html", {"form": fm})
     else:
-        fm = Taskform(instance=obj)
-
-        return render(request, "auth_system/taskedit.html", {"form": fm})
-
-
-@login_required
-def taskview(request):
-    Task_name = Taskmodel.objects.filter(user=request.user.id)
-
-    return render(request, "auth_system/taskview.html", {"Task_name": Task_name})
-
-
-@login_required
-def taskdetail(request, id):
-    obj = get_object_or_404(Taskmodel, id=id)
-    context = {
-        "task_name": obj.task_name,
-        "task_description": obj.task_description,
-        "task_id": obj.id,
-    }
-
-    return render(request, "auth_system/taskdetail.html", context)
+        messages.error(request, "You are not authorized to edit this task.")
+        return redirect("taskname")
 
 
 def home_view(request):

@@ -128,7 +128,7 @@
 
 
                 <p class="c">
-                <h4><a href="{% url 'taskdetail' id.id %}">{{ id.task_name }}</a>
+                <h4><a href="{% url 'taskdetail' id.id  %}">{{ id.task_name }}</a>
 
                     <button><a href="{% url 'taskdelete' id.id request.user.id %}">Delete</a></button>
                 </h4>

@@ -7,8 +7,8 @@
         <h4>{{ id.task_list }}</h4>
         <li> {{ id.task_description }} <a href="{% url 'taskdelete' id.id  %}">delete</a>
             <form method="POST">
-                <input type="checkbox" name="completed" value="complete">
-                <label for="completed">completed</label>
+                <input type="checkbox" name="complete" value="task">
+                <label for="complete">complete</label>
 
                 <a href="{% url 'taskedit' id.id  %}">
                     <button type="button">Update</button></a>

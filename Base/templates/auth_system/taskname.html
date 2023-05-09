@@ -1,149 +1,324 @@
 {% extends 'auth_system/base.html' %}
 {% block content %}<style>
-    .center {
-        margin: auto;
-        width: 60%;
-        border: 3px solid white;
-        padding: 10px;
+    #task {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
     }
 
-    .form-container {
-        display: flex;
-        justify-content: flex-start;
+    #task td,
+    #task th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    #task tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    #task tr:hover {
+        background-color: #ddd;
+    }
+
+    #task th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #478fcd;
+        color: white;
+    }
+
+    .split {
+        height: 100%;
+        width: 50%;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        overflow-x: hidden;
+        padding-top: 20px;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* Full-width input fields */
+    input[type=text],
+    input[type=password] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    /* Set a style for all buttons */
+    button {
+        background-color: #04AA6D;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    button:hover {
+        opacity: 0.8;
+    }
+
+    /* Extra styles for the cancel button */
+    .cancelbtn {
+        width: auto;
+        padding: 10px 18px;
+        background-color: #f44336;
+    }
+
+    /* Center the image and position the close button */
+    .imgcontainer {
+        text-align: center;
+        margin: 24px 0 12px 0;
+        position: relative;
+    }
+
+    img.avatar {
+        width: 40%;
+        border-radius: 50%;
+    }
+
+    .container {
+        padding: 16px;
+    }
+
+    span.psw {
+        float: right;
+        padding-top: 16px;
+    }
+
+    /* The Modal (background) */
+    .modal {
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        /* Stay in place */
+        z-index: 1;
+        /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%;
+        /* Full width */
+        height: 100%;
+        /* Full height */
+        overflow: auto;
+        /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0);
+        /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4);
+        /* Black w/ opacity */
+        padding-top: 60px;
+    }
+
+    add
+
+    /* Modal Content/Box */
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto 15% auto;
+        /* 5% from the top, 15% from the bottom and centered */
+        border: 1px solid #888;
+        width: 80%;
+        /* Could be more or less, depending on screen size */
+    }
+
+    a {
+        color: #000 !important;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    /* The Close Button (x) */
+    .close {
+        position: absolute;
+        right: 25px;
+        top: 0;
+        color: #000;
+        font-size: 35px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: red;
+        cursor: pointer;
+    }
+
+    /* Add Zoom Animation */
+    .animate {
+        -webkit-animation: animatezoom 0.6s;
+        animation: animatezoom 0.6s
+    }
+
+    @-webkit-keyframes animatezoom {
+        from {
+            -webkit-transform: scale(0)
+        }
+
+        to {
+            -webkit-transform: scale(1)
+        }
+    }
+
+    @keyframes animatezoom {
+        from {
+            transform: scale(0)
+        }
+
+        to {
+            transform: scale(1)
+        }
+    }
+
+    /* Change styles for span and cancel button on extra small screens */
+    @media screen and (max-width: 300px) {
+        span.psw {
+            display: block;
+            float: none;
+        }
+
+        .cancelbtn {
+            width: 100%;
+        }
     }
 
     .center {
         text-align: center;
-        border: 3px solid white;
-    }
+        margin: auto;
+        width: 60%;
 
-
-
-    label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-    }
-
-
-    input[type="text"],
-    input[type="email"],
-    input[type="password"] {
-        display: block;
-        width: 100%;
         padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        margin-bottom: 10px;
-        font-size: 16px;
     }
 
-    /* Style for submit button */
-    input[type="submit"] {
-        background-color: #4CAF50;
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
+
+
+    .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: red;
+        color: white;
+        text-align: center;
     }
 
-    /* Style for form container */
-    form {
-        max-width: 500px;
-        margin: 0 auto;
+    .table {
+        border: solid #000 2px;
+        margin: 0 auto !important;
+    }
+
+    .navbar-expand-sm {
+        flex-wrap: nowrap;
+        justify-content: flex-end;
+        margin-right: 20px;
+    }
+
+    .nav-link {
+        background-color: red;
+        border-radius: 5px;
+        width: 100px;
+        color: #f2f2f2;
     }
 </style>
-<div class="center">
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-sm">
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">logout</button>
+            </form>
+        </li>
+
+    </ul>
+
+</nav>
+
+
+<div>
     <div class="center">
         {% if request.user.is_authenticated %}
-
-
         <h1>Hello, {{request.user.first_name}}</h1>
-    </div>
-</div>
 
-{% else %}
-<a href="{% url 'login' %}">login</a>
-{% endif %}
-<hr>
-
-
-<ul>
-    {% for i in Task_list %}
-    <h4>{{ i.task_list }}</h4>
-    <li> {{ i.task_description }} </li>
-    {% endfor %}
-</ul>
-
-
-</tr>
-
-
-
-<form method="POST">
-    {% csrf_token %}
-    {{ form }}
-
-    <button type="submit">Add</button>
-</form>
-
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-<br>
-<div class="center">
-
-    <form action="{% url 'logout' %}" method="post">
-        {% csrf_token %}
-        <button type="submit">logout</button>
-    </form>
-
-
-
-</div>
-
-
-
-<ul>
-
-
-
-
-    </div>
+        <h2>{{request.user.first_name}}'s list</h2>
     </div>
     <div class="center">
 
-        <h1>My To-do list</h1>
-        <ul>
-            <form method="POST">
-                {% if Task_name %}
-                {% for id in Task_name %}
-                {% csrf_token %}
-
-
-                <p class="c">
-                <h4><a href="{% url 'taskdetail' id.id  %}">{{ id.task_name }}</a>
-
-                    <button><a href="{% url 'taskdelete' id.id request.user.id %}">Delete</a></button>
-                </h4>
-                </p>
-                {% endfor %}
-                {% else %}
-                <p> There are no items to show. </p>
-                {% endif %}
-
-
-
-
+        <form action="{% url 'taskcreate' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" style="width:50%">ADD Task</button>
+        </form>
     </div>
+    {% endif %}
 
 
 
 
-    {% endblock content %}
+
+
+
+
+
+    </thead>
+
+    <ul>
+        <form method="POST">
+            {% if Task_name %}
+            {% csrf_token %}
+            <table class="table table-bordered" id="example" style="text-align: center;">
+                <thead class="table-success">
+                    <tr>
+                        <th>SN</th>
+                        <th>Task</th>
+                        <th>Status</th>
+                        <th>Delete</th>
+
+
+
+                    </tr>
+
+                    {% for id in Task_name %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><a href="{% url 'taskdetail' id.id %}">{{id.task_name }}</a></td>
+                        <td>
+                            {% if id.complete %}
+                            <p>completed</p>
+                            {% else %}
+                            <p>Not completed</p>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <button class="btn-danger" style="color: #ddd;"><a
+                                    href="{% url 'taskdelete' id.id request.user.id %}">Delete</a></button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+            </table>
+            {% else %}
+            <p> There are no items to show. </p>
+            {% endif %}
+        </form>
+
+
+
+
+
+
+        {% endblock content %}

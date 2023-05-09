@@ -57,33 +57,41 @@ def logoutUser(request):
     return redirect("login")
 
 
-@login_required
-def taskname(request):
-    if request.method == "POST":
-        form = Taskform(request.POST)
+# @login_required
+# def taskname(request):
+#     if request.method == "POST":
+#         form = Taskform(request.POST)
 
-        if form.is_valid():
-            task = form.save(commit=False)
-            task.user = request.user
-            existing_task_name = Taskmodel.objects.filter(
-                user=request.user, task_name=task.task_name
-            )
-            if existing_task_name.exists():
-                messages.error(request, "Task already exists")
-            else:
-                task.save()
+#         if form.is_valid():
+#             task = form.save(commit=False)
+#             task.user = request.user
+#             existing_task_name = Taskmodel.objects.filter(
+#                 user=request.user, task_name=task.task_name
+#             )
+#             if existing_task_name.exists():
+#                 messages.error(request, "Task already exists")
 
-                messages.success(request, ("Item Has been added"))
-            return redirect("taskname")
-        else:
-            messages.error(request, "Task already exist")
-            return redirect("taskname")
-    else:
-        form = Taskform
-        Task_name = Taskmodel.objects.filter(user=request.user.id)
-        return render(
-            request, "auth_system/taskname.html", {"form": form, "Task_name": Task_name}
-        )
+#                 if "complete" in form.cleaned_data:
+#                     task.complete = form.cleaned_data["complete"]
+
+#                     task.save()
+#             else:
+#                 task.save()
+
+#                 messages.success(request, ("Item Has been added"))
+#             return redirect("taskname")
+#         else:
+#             messages.error(request, "Task already exist")
+#             return redirect("taskname")
+#     else:
+#         form = Taskform
+#         Task_name = Taskmodel.objects.filter(user=request.user.id)
+
+#         return render(
+#             request,
+#             "auth_system/taskname.html",
+#             {"form": form, "Task_name": Task_name},
+#         )
 
 
 @login_required
@@ -109,18 +117,18 @@ def taskdelete(request, id, user):
         if request.method == "POST":
             obj.delete()
             messages.success(request, ("Item Has been deleted"))
-            return HttpResponseRedirect("/todotask")
+            return HttpResponseRedirect("/taskname")
         return render(request, "auth_system/taskdelete.html", {"task": obj})
     else:
         messages.error(request, "You are not authorized to delete this task.")
-        return redirect("todotask")
+        return redirect("taskname")
 
 
 @login_required
 def taskdetail(request, id):
     obj = get_object_or_404(Taskmodel, id=id)
     user_id = obj.user_id
-
+    
     if request.user.id == obj.user_id:
         context = {
             "task_name": obj.task_name,
@@ -156,3 +164,71 @@ def taskedit(request, task_id):
 
 def home_view(request):
     return render(request, "login.html")
+
+
+# def taskstrike(request, id):
+#     task = get_object_or_404(Taskmodel, id=id)
+#     print(task)
+#     if request.method == "POST":
+#         completed = request.POST.get("completed", False)
+#         task.completed = True if completed else False
+#         print(task)
+#     else:
+#         return redirect("taskname")
+@login_required
+def taskname(request):
+    if request.method == "POST":
+        form = Taskform(request.POST)
+
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.user = request.user
+            existing_task_name = Taskmodel.objects.filter(
+                user=request.user, task_name=task.task_name
+            )
+            if existing_task_name.exists():
+                messages.error(request, "Task already exists")
+            else:
+                task.save()
+                if "complete" in form.cleaned_data:
+                    task.complete = form.cleaned_data["complete"]
+                    complete=task.save()
+                messages.success(request, "Item has been added")
+            return redirect("taskname")
+        else:
+            return redirect("taskname")
+    else:
+        form = Taskform
+        task_name = Taskmodel.objects.filter(user=request.user.id)
+
+        return render(
+            request,
+            "auth_system/taskname.html",
+            {"form": form, "Task_name": task_name},
+        )
+
+
+@login_required
+def taskcreate(request):
+    Task_name = Taskmodel.objects.filter(user=request.user.id)
+    if request.method == "POST":
+        form = Taskform(request.POST)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.user = request.user
+            existing_task_name = Taskmodel.objects.filter(
+                user=request.user, task_name=task.task_name
+            )
+            if existing_task_name.exists():
+                messages.error(request, "Task already exists")
+                return redirect("taskcreate")
+            else:
+                task.save()
+                return redirect("taskname")
+
+    else:
+        form = Taskform()
+
+    return render(
+        request, "auth_system/taskcreate.html", {"form": form, "Task_name": Task_name}
+    )

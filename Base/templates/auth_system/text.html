@@ -1,0 +1,77 @@
+</div>
+</div>
+
+<h1> My list</h1>
+<div class="container">
+    <div class="center">
+
+        <div class="center">
+
+
+
+
+            <table class="table table-bordered" id="example" style="text-align: center;">
+                <thead class="table-success">
+
+                    <tr>
+                        <th>SN</th>
+                        <th>Task</th>
+                        <th>Delete</th>
+                        <th>Update</th>
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <ul>
+                    <form method="POST">
+                        {% if Task_name %}
+                        <tr>{% for id in Task_name %}</tr>
+                        {% csrf_token %}
+
+
+
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+
+                            <a>
+                                {{id.task_name }}</a>
+                    </form>
+                    </td>
+
+                    <td> <button><a href="{% url 'taskdelete' id.id request.user.id %}">Delete</a></button>
+                    </td>
+                    <td>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="checkbox" name="complete" {% if task.complete %}checked{% endif %}>
+                            <label for="Status"> completed</label><br><br>
+                            <input type="submit" value="Submit">
+                        </form>
+                        {% if Task_name.complete == True %}
+                        <strike>{{id.Task_name}}</strike>
+                        {% else %}
+                        <span>{{id.Task_name}}</span>
+                        {% endif %}
+
+                    </td>
+                    <td>
+
+                    </td>
+                    <td><button><a href="{% url 'taskdetail' id.id %}">Details</a></button>
+                    </td>
+                    </p>
+
+
+                    {% endfor %}
+                    {% else %}
+                    <p> There are no items to show. </p>
+                    {% endif %}
+            </table>
+
+
+
+        </div>
+    </div>
+</div>

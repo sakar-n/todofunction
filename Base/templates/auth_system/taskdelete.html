@@ -1,15 +1,14 @@
+{% extends 'auth_system/base.html' %}
+{% block content %}
 <style>
     .center {
+        text-align: center;
         margin: auto;
-        width: 60%;
-        border: 3px solid white;
+        width: 80%;
+
         padding: 10px;
     }
 
-    .center {
-        text-align: center;
-        border: 3px solid white;
-    }
 
 
 
@@ -27,17 +26,18 @@
     <div class="center">
         <div class="main">
             <div class="style">
-
+                <h1>Delete</h1>
                 <form method="POST">
 
                     {% csrf_token %}
                     Are you sure you want to delete this item ?
                     {{ id.task_list }}
                     {{ id.task_description }}
-                    <input type="submit" value="Yes" />
-                    <a href="/taskname">Cancel </a>
+                    <input type="submit" value="Yes">
+                    <a href="{% url 'taskname' %}">Cancel </a>
                 </form>
             </div>
         </div>
     </div>
 </div>
+{% endblock content %}
